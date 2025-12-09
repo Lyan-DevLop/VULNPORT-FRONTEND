@@ -1,0 +1,333 @@
+/* ============================================================
+   LANDING PAGE – Estilo D (minimal + partículas)
+   Usa variables del tema (funciona en claro / oscuro)
+   ============================================================ */
+
+.landing-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.08),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(0, 0, 0, 0.18),
+      transparent 55%
+    ),
+    var(--bg);
+  display: flex;
+  align-items: center;
+}
+
+/* Capa de fondo animado */
+.landing-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Órbitas minimalistas */
+.landing-orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: 0 0 40px rgba(15, 23, 42, 0.24);
+  animation: landing-orbit-pulse 12s linear infinite;
+}
+
+.landing-orbit.orbit-1 {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  right: -80px;
+}
+
+.landing-orbit.orbit-2 {
+  width: 380px;
+  height: 380px;
+  bottom: -160px;
+  left: -80px;
+  animation-delay: -4s;
+}
+
+.landing-orbit.orbit-3 {
+  width: 260px;
+  height: 260px;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.4;
+  animation-delay: -8s;
+}
+
+@keyframes landing-orbit-pulse {
+  0% {
+    transform: scale(1) translateZ(0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.05) translateZ(0);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+    opacity: 0.45;
+  }
+}
+
+/* Partículas suaves */
+.landing-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.landing-particles span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(148, 163, 184, 0.9), transparent);
+  box-shadow: 0 0 12px rgba(148, 163, 184, 0.9);
+  opacity: 0.5;
+  animation: landing-float 18s linear infinite;
+}
+
+.landing-particles span:nth-child(1) {
+  top: 12%;
+  left: 18%;
+  animation-delay: 0s;
+}
+.landing-particles span:nth-child(2) {
+  top: 30%;
+  right: 10%;
+  animation-delay: -4s;
+}
+.landing-particles span:nth-child(3) {
+  bottom: 20%;
+  left: 12%;
+  animation-delay: -8s;
+}
+.landing-particles span:nth-child(4) {
+  bottom: 28%;
+  right: 22%;
+  animation-delay: -12s;
+}
+.landing-particles span:nth-child(5) {
+  top: 55%;
+  left: 45%;
+  animation-delay: -16s;
+}
+
+@keyframes landing-float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-18px) translateX(10px);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(8px) translateX(-8px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateY(-12px) translateX(6px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+}
+
+/* Contenido */
+.landing-content {
+  position: relative;
+  z-index: 1;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+/* Hero texto */
+.landing-hero {
+  max-width: 560px;
+}
+
+.landing-badge {
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--link-active);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.landing-title {
+  font-size: clamp(2.3rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.landing-title-accent {
+  display: inline-block;
+  margin-left: 0.35rem;
+  background: linear-gradient(
+    135deg,
+    var(--link-active),
+    #10b981
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.landing-subtitle {
+  font-size: 0.98rem;
+  color: #9ca3af;
+  max-width: 520px;
+}
+
+/* Highlights */
+.landing-highlights {
+  max-width: 620px;
+}
+
+.landing-highlight-card {
+  background: rgba(15, 23, 42, 0.06);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  backdrop-filter: blur(6px);
+}
+
+/* Botones principales */
+.landing-btn-main {
+  border-radius: 999px;
+  padding-inline: 1.6rem;
+  padding-block: 0.6rem;
+  font-weight: 600;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+}
+
+.landing-btn-secondary {
+  border-radius: 999px;
+  padding-inline: 1.4rem;
+  padding-block: 0.6rem;
+  font-weight: 500;
+  border-color: rgba(148, 163, 184, 0.35) !important;
+  color: var(--text) !important;
+  background: rgba(15, 23, 42, 0.05);
+}
+
+.landing-btn-secondary:hover {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+/* Nota */
+.landing-note {
+  max-width: 480px;
+}
+
+/* Tarjeta lateral */
+.landing-card {
+  background: rgba(15, 23, 42, 0.82);
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  padding: 1.5rem;
+  backdrop-filter: blur(12px);
+  color: var(--text);
+}
+
+body:not(.dark) .landing-card {
+  /* En tema claro, un poco más claro pero usando variables */
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(148, 115, 87, 0.4); /* café sutil */
+}
+
+.landing-card-header h5 {
+  color: var(--text);
+}
+
+.landing-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at 30% 0%,
+    #22c55e,
+    #0ea5e9 55%,
+    #1d4ed8 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.6);
+  font-size: 1.2rem;
+}
+
+.landing-feature-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 1.25rem;
+}
+
+.landing-feature-list li {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.landing-cta {
+  box-shadow: 0 10px 26px rgba(37, 99, 235, 0.55);
+}
+
+.landing-metadata {
+  border-top: 1px dashed rgba(148, 163, 184, 0.4);
+  padding-top: 0.7rem;
+}
+
+/* Responsivo */
+@media (max-width: 992px) {
+  .landing-wrapper {
+    align-items: flex-start;
+  }
+
+  .landing-content {
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+  }
+
+  .landing-card {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .landing-hero {
+    text-align: left;
+  }
+
+  .landing-btn-main,
+  .landing-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .landing-highlights {
+    margin-bottom: 1.6rem;
+  }
+}

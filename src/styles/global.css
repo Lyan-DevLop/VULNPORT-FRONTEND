@@ -1,0 +1,177 @@
+/* ============================================================
+   VARIABLES DEL TEMA (CLARO Y OSCURO)
+   ============================================================ */
+
+/* ---------- Tema claro (NUEVA PALETA HABANO / CAFÉ) ---------- */
+:root {
+  --bg: #F5E9DA;               /* Beige suave */
+  --text: #3D2F1C;             /* Café oscuro */
+
+  --sidebar-bg: #E6D3B8;       /* Arena tostado */
+  --sidebar-border: #CBB79F;
+
+  --navbar-bg: #E8D9C4;        /* Habano claro */
+  --navbar-border: #C4B199;
+
+  --card-bg: #FAF4EC;          /* Cremita muy suave */
+  --card-border: #D8C7B3;
+
+  --input-bg: #FAF4EC;
+  --input-text: #3D2F1C;
+  --input-border: #CDBBA7;
+
+  --link: #6B4E2E;             /* Café medio */
+  --link-active: #8B5E34;      /* Marrón fuerte */
+
+  --scroll-bg: #E8D9C4;
+  --scroll-thumb: #A6784F;
+
+  --table-bg: #FAF4EC;
+  --table-striped: #F0E3D3;
+  --table-hover: #E9D8C4;
+}
+
+/* ---------- Tema oscuro (IGUAL QUE ANTES) ---------- */
+body.dark {
+  --bg: #121417;
+  --text: #e5e7eb;
+
+  --sidebar-bg: #0f1114;
+  --sidebar-border: #222;
+
+  --navbar-bg: #0f1114;
+  --navbar-border: #2a2f36;
+
+  --card-bg: #1b1e23;
+  --card-border: #2a2f36;
+
+  --input-bg: #0f1114;
+  --input-text: #e5e7eb;
+  --input-border: #2a2f36;
+
+  --link: #e5e7eb;
+  --link-active: #3b82f6;
+
+  --scroll-bg: #1b1e23;
+  --scroll-thumb: #3b82f6;
+
+  --table-bg: #1b1e23;
+  --table-striped: #23272f;
+  --table-hover: #2a2f36;
+}
+
+/* ============================================================
+   ESTILOS GENERALES (NO CAMBIAN)
+   ============================================================ */
+
+body {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+.text-white {
+  color: var(--text) !important;
+}
+
+.text-muted {
+  color: #9ca3af !important;
+}
+
+.sidebar-dark,
+.bg-dark.sidebar {
+  background-color: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--sidebar-border) !important;
+}
+
+.navbar-dark {
+  background-color: var(--navbar-bg) !important;
+  border-bottom: 1px solid var(--navbar-border) !important;
+  color: var(--text) !important;
+}
+
+.card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--card-border) !important;
+  color: var(--text) !important;
+}
+
+.table-dark {
+  --bs-table-bg: var(--table-bg);
+  --bs-table-striped-bg: var(--table-striped);
+  --bs-table-hover-bg: var(--table-hover);
+  --bs-table-border-color: var(--card-border);
+  color: var(--text) !important;
+}
+
+.form-control,
+.input-group-text {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border: 1px solid var(--input-border) !important;
+}
+
+.form-control:focus {
+  border-color: #8B5E34 !important;
+  box-shadow: 0 0 0 2px #8b5e3435 !important;
+}
+
+.btn-primary {
+  background-color: #8B5E34 !important;
+  border-color: #8B5E34 !important;
+}
+
+.btn-warning {
+  background-color: #E3B778 !important;
+  border-color: #E3B778 !important;
+  color: #3D2F1C !important;
+}
+
+.btn-danger {
+  background-color: #B0493B !important;
+}
+
+.btn-success {
+  background-color: #6D8B45 !important;
+}
+
+a,
+.nav-link {
+  color: var(--link) !important;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  color: var(--link-active) !important;
+}
+
+/* Scroll */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scroll-bg);
+}
+
+/* Tooltip */
+.recharts-tooltip-wrapper {
+  color: #000 !important;
+}
+
+/* ============================================================
+   FIX TABLAS UNIVERSALES
+   ============================================================ */
+
+.theme-table {
+  --bs-table-color: var(--text) !important;
+  --bs-table-bg: var(--table-bg) !important;
+  --bs-table-striped-bg: var(--table-striped) !important;
+  --bs-table-hover-bg: var(--table-hover) !important;
+}
+
+/* etc... (resto de tu CSS igual) */

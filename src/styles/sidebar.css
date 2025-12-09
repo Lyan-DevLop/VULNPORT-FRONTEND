@@ -1,0 +1,58 @@
+/* ===========================
+   SIDEBAR CON TEMA
+   =========================== */
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background-color: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--sidebar-border) !important;
+  color: var(--text) !important;
+}
+
+.sidebar .nav-link {
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: var(--link) !important;
+}
+
+.sidebar .nav-link:hover {
+  color: var(--link-active) !important;
+}
+
+.sidebar .nav-link.active {
+  background-color: #0d6efd;
+  color: #ffffff !important;
+}
+
+/* ===========================
+   SIDEBAR RESPONSIVE
+   =========================== */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100% !important;
+    min-height: auto;
+    position: relative;        /* no fija a toda la pantalla */
+    border-right: none !important;
+    border-bottom: 1px solid var(--sidebar-border) !important;
+  }
+
+  /* Menú más cómodo en móvil */
+  .sidebar .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sidebar .nav-item {
+    width: 50%;
+    margin-bottom: 4px;
+  }
+
+  .sidebar .nav-link {
+    font-size: 0.85rem;
+    padding: 6px 8px;
+  }
+}
+
+
+
