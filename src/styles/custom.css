@@ -8,7 +8,6 @@ body {
   min-height: 100vh;
 }
 
-/* Si quieres que este gradient permanezca igual en tema claro/oscuro, mantenemos colores fijos */
 .main-content {
   background: radial-gradient(circle at top, #1b1f3a, #050509);
   min-height: calc(100vh - 56px);

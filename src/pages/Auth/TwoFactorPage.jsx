@@ -29,7 +29,7 @@ export default function TwoFactorPage() {
       setMethod(twoFAMethods[0]);
     }
   }, [twoFAMethods]);
-
+  // handleOtpChange para manejar cambios en cada input
   const handleOtpChange = (value, index) => {
     if (!/^\d?$/.test(value)) return;
 
@@ -41,7 +41,7 @@ export default function TwoFactorPage() {
       inputsRef.current[index + 1]?.focus();
     }
   };
-
+  // handlePaste para pegar el código en los inputs
   const handlePaste = (e) => {
     const text = e.clipboardData.getData("text");
     if (/^\d{6}$/.test(text)) {
@@ -63,9 +63,6 @@ export default function TwoFactorPage() {
 
     return () => clearInterval(interval);
   }, [isEmail, emailSent]);
-
-  // Ya NO enviamos el correo automáticamente
-  // (Antes aquí se enviaba, ahora ya no)
 
   // Validación realtime
   useEffect(() => {

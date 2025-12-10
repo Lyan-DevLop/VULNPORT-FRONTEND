@@ -1,18 +1,16 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/v1",
+  baseURL: "http://127.0.0.1:8000/api/v1", // Base URL para todas las requests (cambiar para AWS)
   withCredentials: false,
 });
 
-// Axios aislado para refresh
+// Axios aislado para refresh token
 const axiosRefresh = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1",
 });
 
-// =========================
 // INYECTAR ACCESS TOKEN
-// =========================
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
@@ -25,9 +23,7 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
-// =========================
 // INTERCEPTOR REFRESH TOKEN
-// =========================
 axiosClient.interceptors.response.use(
   (res) => res,
 
@@ -50,7 +46,6 @@ axiosClient.interceptors.response.use(
       const refreshToken = localStorage.getItem("refresh_token");
       if (!refreshToken) throw new Error("No hay refresh token");
 
-      // Muy importante → NO repetir /api/v1
       const res = await axiosRefresh.post("/auth/refresh", {
         refresh_token: refreshToken,
       });

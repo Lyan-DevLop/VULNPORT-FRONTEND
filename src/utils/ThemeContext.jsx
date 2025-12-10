@@ -7,7 +7,6 @@ export function ThemeProvider({ children }) {
     localStorage.getItem("theme") || "dark"
   );
 
-  // Aplicar clase al body
   useEffect(() => {
     document.body.classList.remove("light", "dark");
     document.body.classList.add(theme);

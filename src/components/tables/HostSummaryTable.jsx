@@ -122,7 +122,7 @@ export default function HostSummaryTable() {
         {/* ====================== FILTROS ====================== */}
         <div className="mt-3 d-flex flex-wrap gap-2">
 
-          {/* === AJUSTE 1: SELECT SO === */}
+          {/* === SELECT SO === */}
           <select
             className="form-select form-select-sm w-auto"
             style={{
@@ -140,7 +140,7 @@ export default function HostSummaryTable() {
             <option value="unknown">Desconocido</option>
           </select>
 
-          {/* === AJUSTE 2: SELECT RIESGO === */}
+          {/* === SELECT RIESGO === */}
           <select
             className="form-select form-select-sm w-auto"
             style={{
@@ -157,7 +157,7 @@ export default function HostSummaryTable() {
             <option value="bajo">Bajo</option>
           </select>
 
-          {/* === LOS DEMÁS INPUTS NO SE MODIFICAN === */}
+          {/* === INPUT PUERTOS MÍN === */}
           <input
             type="number"
             className="form-control form-control-sm w-auto bg-dark text-white border-secondary"
@@ -190,7 +190,7 @@ export default function HostSummaryTable() {
         </div>
       </div>
 
-      {/* ========== TABLA (INTACTA) ========== */}
+      {/* ========== TABLA ========== */}
       <div className="table-responsive">
         <table className="table theme-table table-striped table-hover align-middle mb-0">
           <thead
@@ -265,7 +265,7 @@ export default function HostSummaryTable() {
         </table>
       </div>
 
-      {/* MODAL — SIN CAMBIOS */}
+      {/* MODAL */}
       {selectedHost && (
         <div
           className="modal fade show"

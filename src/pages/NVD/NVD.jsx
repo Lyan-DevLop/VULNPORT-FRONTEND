@@ -4,7 +4,7 @@ import { getVulnerabilities } from "../../api/vulnerabilities.api";
 export default function NVD() {
   const [vulns, setVulns] = useState([]);
 
-  // ==== Filtros ====
+  // Filtros 
   const [search, setSearch] = useState("");
   const [severityFilter, setSeverityFilter] = useState("all");
   const [minScore, setMinScore] = useState("");
@@ -24,13 +24,11 @@ export default function NVD() {
     return new Date(d).toLocaleDateString();
   };
 
-  // ======== Hosts y puertos únicos ========
+  // Hosts y puertos únicos 
   const hosts = [...new Set(vulns.map((v) => v.port?.host?.ip_address).filter(Boolean))];
   const ports = [...new Set(vulns.map((v) => v.port?.port_number).filter(Boolean))];
 
-  // ===========================
-  // FILTRO PRINCIPAL
-  // ===========================
+  // FILTRO PRINCIPAL 
   const filtered = vulns.filter((v) => {
     const text = search.toLowerCase();
 
@@ -65,9 +63,7 @@ export default function NVD() {
     return true;
   });
 
-  // ===========================
   // BADGES POR SEVERIDAD
-  // ===========================
   const severityBadge = (sev) => {
     const base = "badge text-dark";
 
@@ -99,7 +95,7 @@ export default function NVD() {
         CVEs detectados en los servicios y puertos encontrados durante los escaneos.
       </p>
 
-      {/* =========================== FILTROS =========================== */}
+      {/* FILTROS */}
       <div
         className="card p-3 mt-3 shadow-sm"
         style={{
@@ -245,7 +241,7 @@ export default function NVD() {
         </div>
       </div>
 
-      {/* =========================== TABLA =========================== */}
+      {/* TABLA DE VULNERABILIDADES */}
       <div
         className="card p-3 mt-4 shadow"
         style={{

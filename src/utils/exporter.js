@@ -2,9 +2,7 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
-/* ======================
-   EXPORTAR A EXCEL
-====================== */
+/* EXPORTAR A EXCEL */
 export function exportExcel(data, fileName = "export.xlsx") {
   if (!data || data.length === 0) return alert("No hay datos para exportar");
 
@@ -16,9 +14,7 @@ export function exportExcel(data, fileName = "export.xlsx") {
 }
 
 
-/* ======================
-   EXPORTAR A PDF
-====================== */
+/* EXPORTAR A PDF*/
 export function exportPDF(data, title = "Reporte") {
   if (!data || data.length === 0) return alert("No hay datos para exportar");
 

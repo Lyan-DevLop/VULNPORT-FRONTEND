@@ -16,17 +16,17 @@ export default function PrivateRoute({ children }) {
     );
   }
 
-  // ⛔ El usuario NO tiene token → login
+  // El usuario NO tiene token → login
   if (!token) {
     return <Navigate to="/login" replace />;
   }
 
-  // 🔐 Usuario hizo login fase 1 pero falta 2FA → redirigir
+  // Usuario hizo login fase 1 pero falta 2FA → redirigir
   if (twoFAPending && location.pathname !== "/2fa") {
     return <Navigate to="/2fa" replace />;
   }
 
-  // ⏳ Hay token pero user aún no carga → esperar
+  // Hay token pero user aún no carga → esperar
   if (token && !user) {
     return (
       <div className="text-center text-white p-5">

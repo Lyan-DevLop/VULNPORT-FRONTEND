@@ -19,9 +19,8 @@ export default function Scanner() {
 
   const [summaryModal, setSummaryModal] = useState(null);
 
-  // ===============================
+
   // PROGRESO SIMULADO
-  // ===============================
   const simulateProgress = () => {
     setProgress(0);
     let p = 0;
@@ -37,10 +36,7 @@ export default function Scanner() {
     }, 200);
   };
 
-  // ===============================
   // MANEJADORES DE ESCANEO
-  // ===============================
-
   const finalizeScan = (hosts, type) => {
     const labels = {
       single: "Escaneo Individual terminado exitosamente",
@@ -128,9 +124,7 @@ export default function Scanner() {
     setLoading(false);
   };
 
-  // ===============================
   // CONFIG
-  // ===============================
   const modeTitle = {
     single: "Escaneo Individual (REST)",
     range: "Escaneo de Rango (REST)",
@@ -149,9 +143,7 @@ export default function Scanner() {
     auto: "info",
   };
 
-  // ===============================
   // RENDER
-  // ===============================
   return (
     <div className="container-fluid mt-4" style={{ color: "var(--text)" }}>
       
@@ -363,9 +355,7 @@ export default function Scanner() {
         )}
       </div>
 
-      {/* =====================================================
-          MODAL FINAL DEL ESCANEO
-      ===================================================== */}
+      {/* MODAL FINAL DEL ESCANEO */}
       {summaryModal && (
         <div
           className="modal fade show"

@@ -52,15 +52,15 @@ export default function AppRouter() {
         <BrowserRouter>
           <Routes>
 
-            {/* ============== SMART LANDING (Dependiendo del estado) ============== */}
+            {/* SMART LANDING (Dependiendo del estado) */}
             <Route path="/" element={<SmartLandingRoute />} />
 
-            {/* ============== PÚBLICAS ============== */}
+            {/* PÚBLICAS */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/2fa" element={<TwoFactorPage />} />
 
-            {/* ============== PRIVADAS ============== */}
+            {/* PRIVADAS */}
             <Route
               path="/dashboard"
               element={

@@ -20,18 +20,14 @@ export default function TwoFASetupPage() {
   const [showDisable, setShowDisable] = useState(false);
   const [loadingDisable, setLoadingDisable] = useState(false);
 
-  // ==================================================
   // ESTADO INICIAL
-  // ==================================================
   useEffect(() => {
     axiosClient.get("/twofa/status").then((res) => {
       setTwoFAEnabled(res.data.is_enabled);
     });
   }, []);
 
-  // ======================================================
   // GENERAR SECRETO TOTP + URI PARA QR
-  // ======================================================
   async function generateSecret() {
     const res = await axiosClient.post("/twofa/generate-secret");
 
@@ -46,17 +42,13 @@ export default function TwoFASetupPage() {
     setMsg("Código secreto generado. Escanea el QR.");
   }
 
-  // ======================================================
   // ENVIAR CÓDIGO POR EMAIL
-  // ======================================================
   async function sendEmailCode() {
     await axiosClient.post("/twofa/email/send");
     setMsg("Código enviado al correo.");
   }
 
-  // ======================================================
   // ACTIVAR 2FA
-  // ======================================================
   async function verify() {
     try {
       const res = await axiosClient.post("/twofa/verify", {
@@ -75,9 +67,7 @@ export default function TwoFASetupPage() {
     }
   }
 
-  // ======================================================
   // DESACTIVAR 2FA
-  // ======================================================
   async function disable2FA() {
     setLoadingDisable(true);
 
@@ -97,9 +87,7 @@ export default function TwoFASetupPage() {
     setLoadingDisable(false);
   }
 
-  // ======================================================
   // VALIDACIÓN REALTIME — SOLO TOTP
-  // ======================================================
   useEffect(() => {
     if (method !== "totp") return setTotpValid(null);
     if (code.length !== 6) return setTotpValid(null);
@@ -142,9 +130,7 @@ export default function TwoFASetupPage() {
           border: "1px solid rgba(0,238,255,0.25)",
         }}
       >
-        {/* ======================================================
-            2FA ACTIVADO
-        ====================================================== */}
+        {/* 2FA ACTIVADO */}
         {twoFAEnabled ? (
           <>
             <h4 className="fw-bold mb-3 text-success">

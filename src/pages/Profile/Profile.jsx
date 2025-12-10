@@ -141,10 +141,7 @@ export default function Profile() {
     }
   }
 
-  // ============================
   //  UI
-  // ============================
-
   return (
     <div className="container-fluid mt-4" style={{ color: "var(--text)" }}>
       <h2 className="fw-bold">
@@ -166,9 +163,7 @@ export default function Profile() {
         </div>
       )}
 
-      {/* ============================
-          SECCIÓN: INFORMACIÓN BÁSICA
-      ============================ */}
+      {/* SECCIÓN: INFORMACIÓN BÁSICA */}
       <div
         className="card p-4 mt-3 shadow-sm"
         style={{
@@ -218,9 +213,7 @@ export default function Profile() {
         </button>
       </div>
 
-      {/* ============================
-          SECCIÓN: CONTRASEÑA
-      ============================ */}
+      {/* SECCIÓN: CONTRASEÑA */}
       <div
         className="card p-4 mt-4 shadow-sm"
         style={{

@@ -20,13 +20,13 @@ export default function Login() {
     try {
       const res = await login(username, password);
 
-      // 🔐 Si requiere 2FA
+      // Si requiere 2FA
       if (res.needs2FA) {
         navigate("/2fa", { replace: true });
         return;
       }
 
-      // 🔓 Login normal
+      // Login normal
       navigate("/", { replace: true });
 
     } catch (err) {

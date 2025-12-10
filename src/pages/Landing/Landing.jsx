@@ -74,7 +74,7 @@ export default function Landing() {
 
               <div className="d-flex flex-wrap gap-3">
                 <a
-                  href="/public/VulnPortsAgent.zip"
+                  href="/public/VulnPortsAgent.zip" // .exe del agente
                   className="btn btn-primary landing-btn-main"
                   download
                 >

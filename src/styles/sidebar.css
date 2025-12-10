@@ -1,6 +1,4 @@
-/* ===========================
-   SIDEBAR CON TEMA
-   =========================== */
+/* SIDEBAR CON TEMA */
 .sidebar {
   width: 240px;
   min-height: 100vh;
@@ -25,9 +23,7 @@
   color: #ffffff !important;
 }
 
-/* ===========================
-   SIDEBAR RESPONSIVE
-   =========================== */
+/* SIDEBAR RESPONSIVE */
 @media (max-width: 768px) {
   .sidebar {
     width: 100% !important;
