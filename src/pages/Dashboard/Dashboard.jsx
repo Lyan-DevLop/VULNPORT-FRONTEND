@@ -13,7 +13,7 @@ import { getVulnerabilities } from "../../api/vulnerabilities.api";
 export default function Dashboard() {
   const [hosts, setHosts] = useState([]);
   const [vulns, setVulns] = useState([]);
-  const [openSection, setOpenSection] = useState(null); // ⭐ controla las tarjetas
+  const [openSection, setOpenSection] = useState(null); // controla las tarjetas
 
   useEffect(() => {
     getMyHosts().then(setHosts).catch(console.error);
@@ -37,7 +37,7 @@ export default function Dashboard() {
     <div className="container-fluid mt-4 text-white">
       <h2 className="mb-4">Dashboard</h2>
 
-      {/* ================= TARJETAS RESUMEN ================= */}
+      {/* TARJETAS RESUMEN */}
       <div className="row g-3 mb-4">
 
         <div className="col-md-3">
@@ -72,7 +72,7 @@ export default function Dashboard() {
 
       </div>
 
-      {/* ================= GRÁFICOS ================= */}
+      {/* GRÁFICOS */}
       <div className="row g-4 mb-4">
         <div className="col-md-4">
           <RiskPieChart hosts={hosts} />
@@ -87,10 +87,10 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ================= ACORDEÓN DE TABLAS ================= */}
+      {/* ACORDEÓN DE TABLAS */}
       <div className="accordion" id="dashboardAccordion">
 
-        {/* === TABLA DE VULNERABILIDADES === */}
+        {/* TABLA DE VULNERABILIDADES */}
         <div className="card bg-dark border-secondary mb-3">
           <div
             className="card-header d-flex justify-content-between align-items-center"
@@ -116,7 +116,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* === TABLA DE HOSTS === */}
+        {/* TABLA DE HOSTS */}
         <div className="card bg-dark border-secondary mb-3">
           <div
             className="card-header d-flex justify-content-between align-items-center"

@@ -1,8 +1,6 @@
-/* ============================================================
-   VARIABLES DEL TEMA (CLARO Y OSCURO)
-   ============================================================ */
+/* VARIABLES DEL TEMA (CLARO Y OSCURO) */
 
-/* ---------- Tema claro (NUEVA PALETA HABANO / CAFÉ) ---------- */
+/* ---------- Tema claro ---------- */
 :root {
   --bg: #F5E9DA;               /* Beige suave */
   --text: #3D2F1C;             /* Café oscuro */
@@ -31,7 +29,7 @@
   --table-hover: #E9D8C4;
 }
 
-/* ---------- Tema oscuro (IGUAL QUE ANTES) ---------- */
+/* ---------- Tema oscuro ---------- */
 body.dark {
   --bg: #121417;
   --text: #e5e7eb;
@@ -60,9 +58,7 @@ body.dark {
   --table-hover: #2a2f36;
 }
 
-/* ============================================================
-   ESTILOS GENERALES (NO CAMBIAN)
-   ============================================================ */
+/* ESTILOS GENERALES */
 
 body {
   background-color: var(--bg) !important;
@@ -163,9 +159,7 @@ a,
   color: #000 !important;
 }
 
-/* ============================================================
-   FIX TABLAS UNIVERSALES
-   ============================================================ */
+/* FIX TABLAS UNIVERSALES */
 
 .theme-table {
   --bs-table-color: var(--text) !important;
@@ -173,5 +167,3 @@ a,
   --bs-table-striped-bg: var(--table-striped) !important;
   --bs-table-hover-bg: var(--table-hover) !important;
 }
-
-/* etc... (resto de tu CSS igual) */

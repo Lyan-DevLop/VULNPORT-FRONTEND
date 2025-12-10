@@ -4,7 +4,7 @@ export default function Hosts() {
   return (
     <div
       className="container mt-4"
-      style={{ color: "var(--text)" }}   // ← se adapta al tema
+      style={{ color: "var(--text)" }}
     >
       <h2 style={{ color: "var(--text)" }}>Mis Hosts</h2>
 

@@ -44,7 +44,7 @@ export default function Topbar() {
 
       <div className="d-flex align-items-center gap-3">
 
-        {/* 🔆🌙 TOGGLE TEMA */}
+        {/* TOGGLE TEMA */}
         <button
           onClick={toggleTheme}
           className="btn d-flex align-items-center"
@@ -81,7 +81,7 @@ export default function Topbar() {
             onClick={() => setOpen(!open)}
             className="d-flex justify-content-center align-items-center bg-info text-dark fw-bold rounded-circle"
             style={{
-              width: 38,         // 🔥 Mantiene tamaño original
+              width: 38,
               height: 38,
               cursor: "pointer",
               fontSize: "1rem",

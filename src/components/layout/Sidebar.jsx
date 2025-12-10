@@ -32,12 +32,11 @@ export default function Sidebar() {
     <div
       className="sidebar d-flex flex-column p-3 shadow"
       style={{
-        width: collapsed ? 70 : 230,        // 👈 NO CAMBIO TUS TAMAÑOS
+        width: collapsed ? 70 : 230,
         minHeight: "100vh",
         transition: "0.3s",
         position: "relative",
 
-        // 🎨 Adaptado al tema (sin tocar tamaños)
         backgroundColor: "var(--sidebar-bg)",
         borderRight: "1px solid var(--sidebar-border)",
         color: "var(--text)",
@@ -75,13 +74,12 @@ export default function Sidebar() {
                   ${active ? "active" : ""}
                 `}
                 style={{
-                  // 🎨 Se adapta al tema
                   color: active ? "var(--link-active)" : "var(--link)",
                   backgroundColor: active
-                    ? "rgba(59,130,246,0.12)"  // tono del link-active
+                    ? "rgba(59,130,246,0.12)" 
                     : "transparent",
 
-                  fontSize: collapsed ? "0" : "14px", // 👈 NO CAMBIADO
+                  fontSize: collapsed ? "0" : "14px",
                   transition: "0.2s",
                 }}
               >

@@ -99,9 +99,7 @@ export default function AgentManager() {
   const totalPages = Math.ceil(filteredPorts.length / pageSize);
   const pageData = filteredPorts.slice((page - 1) * pageSize, page * pageSize);
 
-  // ============================================================
-  //     ⛔ FUNCIÓN REAL QUE CIERRA EL PUERTO (BACKEND)
-  // ============================================================
+  //  FUNCIÓN REAL QUE CIERRA EL PUERTO (BACKEND)
   const performClosePort = async (port) => {
     if (!selectedAgent) return;
 
@@ -112,7 +110,7 @@ export default function AgentManager() {
     );
 
     if (r) {
-      // Eliminar visualmente el puerto
+      // Eliminar visualmente el puerto hasta el nuevo reporte
       setPorts((prev) => prev.filter((p) => p.port !== port));
 
       if (details?.port === port) setDetails(null);
@@ -121,16 +119,12 @@ export default function AgentManager() {
     }
   };
 
-  // ============================================================
-  //  🔥 Abre modal de confirmación
-  // ============================================================
+  //  Abre modal de confirmación
   const requestClosePort = (port) => {
     setConfirmData({ port });
   };
 
-  // ============================================================
-  //  🔥 Confirmación aceptada
-  // ============================================================
+  //  Confirmación aceptada
   const confirmClose = () => {
     if (confirmData?.port) performClosePort(confirmData.port);
     setConfirmData(null);
@@ -189,9 +183,7 @@ export default function AgentManager() {
         </div>
       </div>
 
-      {/* ============================================================
-          MODAL DE DETALLES
-      ============================================================ */}
+      {/* MODAL DE DETALLES */}
       {details && (
         <PortModal
           details={details}
@@ -201,9 +193,7 @@ export default function AgentManager() {
         />
       )}
 
-      {/* ============================================================
-          🔥 MODAL DE CONFIRMACIÓN AL CERRAR PUERTO
-      ============================================================ */}
+      {/* MODAL DE CONFIRMACIÓN AL CERRAR PUERTO */}
       {confirmData && (
         <div
           className="modal fade show"

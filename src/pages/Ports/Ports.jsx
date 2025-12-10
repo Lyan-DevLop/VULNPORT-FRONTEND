@@ -88,9 +88,7 @@ export default function Ports() {
           <i className="bi bi-funnel me-2"></i>Filtros avanzados
         </h5>
 
-        {/* ============================
-             🎯 TODOS TUS FILTROS AQUÍ
-        ============================ */}
+        {/* TODOS TUS FILTROS AQUÍ */}
         <div className="row g-3">
 
           {/* Protocolo */}

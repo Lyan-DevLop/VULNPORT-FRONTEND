@@ -5,7 +5,7 @@
   padding: 0;
 }
 
-/* 🔥 Layout principal */
+/* Layout principal */
 .app-wrapper {
   display: flex;
   flex-direction: row;
@@ -13,7 +13,7 @@
   min-height: 100vh;
 }
 
-/* 🔥 En móviles sidebar arriba */
+/* En móviles sidebar arriba */
 @media (max-width: 768px) {
   .app-wrapper {
     flex-direction: column;

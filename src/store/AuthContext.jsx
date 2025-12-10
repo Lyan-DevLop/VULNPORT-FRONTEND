@@ -13,9 +13,7 @@ export function AuthProvider({ children }) {
   const [twoFAUserId, setTwoFAUserId] = useState(null);
   const [twoFAMethods, setTwoFAMethods] = useState([]);
 
-  // ======================================================
-  // 🟢 CARGAR USUARIO AL RECARGAR PÁGINA
-  // ======================================================
+  // CARGAR USUARIO AL RECARGAR PÁGINA
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -40,9 +38,7 @@ export function AuthProvider({ children }) {
       .finally(() => setReady(true));
   }, []);
 
-  // ======================================================
-  // 🔐 LOGIN — FASE 1
-  // ======================================================
+  // LOGIN — FASE 1
   async function login(username, password) {
     const params = new URLSearchParams();
     params.append("username", username);
@@ -70,9 +66,7 @@ export function AuthProvider({ children }) {
     return { needs2FA: false };
   }
 
-  // ======================================================
-  // 🔑 LOGIN — FASE 2 (VERIFICAR CÓDIGO)
-  // ======================================================
+  // LOGIN — FASE 2 (VERIFICAR CÓDIGO)
   async function verify2FA(code, method) {
     const res = await axiosClient.post("/auth/login/2fa", {
       user_id: twoFAUserId,
@@ -95,9 +89,7 @@ export function AuthProvider({ children }) {
     return true;
   }
 
-  // ======================================================
-  // 📝 REGISTRO
-  // ======================================================
+  // REGISTRO
   async function register(username, email, password) {
     const res = await axiosClient.post("/users/", {
       username,
@@ -108,9 +100,7 @@ export function AuthProvider({ children }) {
     return res.data;
   }
 
-  // ======================================================
-  // 🚪 LOGOUT
-  // ======================================================
+  // LOGOUT
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("refresh_token");
@@ -132,7 +122,7 @@ export function AuthProvider({ children }) {
         twoFAPending,
         twoFAUserId,
         twoFAMethods,
-        setUser, // 👉 importante para actualizar user desde el setup 2FA
+        setUser, // importante para actualizar user desde el setup 2FA
       }}
     >
       {children}
