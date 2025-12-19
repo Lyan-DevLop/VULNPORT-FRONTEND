@@ -9,6 +9,8 @@ export default function HostSummaryTable() {
 
   const [filterOS, setFilterOS] = useState("all");
   const [filterRisk, setFilterRisk] = useState("all");
+  const [filterSource, setFilterSource] = useState("all");
+
   const [minPorts, setMinPorts] = useState("");
   const [maxPorts, setMaxPorts] = useState("");
   const [dateFrom, setDateFrom] = useState("");
@@ -31,6 +33,12 @@ export default function HostSummaryTable() {
     if (count >= 2) return <span className="badge bg-danger">Alto ({count})</span>;
     if (count === 1) return <span className="badge bg-warning text-dark">Medio</span>;
     return <span className="badge bg-info text-dark">Bajo</span>;
+  };
+
+  // Determinar el origen del host basado en el tipo de scan
+  const hostSource = (host) => {
+    if (!host.ports || host.ports.length === 0) return "SCAN_REST";
+    return host.ports.some((p) => p.source === "AGENT") ? "AGENT" : "SCAN_REST";
   };
 
   const filtered = hosts.filter((h) => {
@@ -61,7 +69,18 @@ export default function HostSummaryTable() {
       (!dateFrom || scanDate >= new Date(dateFrom)) &&
       (!dateTo || scanDate <= new Date(dateTo));
 
-    return matchText && matchOS && matchRisk && matchPorts && matchDate;
+    // 🔥 NUEVO: filtro por origen
+    const source = hostSource(h);
+    const matchSource = filterSource === "all" || filterSource === source;
+
+    return (
+      matchText &&
+      matchOS &&
+      matchRisk &&
+      matchPorts &&
+      matchDate &&
+      matchSource
+    );
   });
 
   function exportExcel() {
@@ -119,20 +138,9 @@ export default function HostSummaryTable() {
           </div>
         </div>
 
-        {/* ====================== FILTROS ====================== */}
+        {/* FILTROS */}
         <div className="mt-3 d-flex flex-wrap gap-2">
-
-          {/* === SELECT SO === */}
-          <select
-            className="form-select form-select-sm w-auto"
-            style={{
-              background: "var(--input-bg)",
-              color: "var(--input-text)",
-              borderColor: "var(--input-border)",
-            }}
-            value={filterOS}
-            onChange={(e) => setFilterOS(e.target.value)}
-          >
+          <select className="form-select form-select-sm w-auto" value={filterOS} onChange={(e) => setFilterOS(e.target.value)}>
             <option value="all">SO (Todos)</option>
             <option value="windows">Windows</option>
             <option value="linux">Linux</option>
@@ -140,87 +148,46 @@ export default function HostSummaryTable() {
             <option value="unknown">Desconocido</option>
           </select>
 
-          {/* === SELECT RIESGO === */}
-          <select
-            className="form-select form-select-sm w-auto"
-            style={{
-              background: "var(--input-bg)",
-              color: "var(--input-text)",
-              borderColor: "var(--input-border)",
-            }}
-            value={filterRisk}
-            onChange={(e) => setFilterRisk(e.target.value)}
-          >
+          <select className="form-select form-select-sm w-auto" value={filterRisk} onChange={(e) => setFilterRisk(e.target.value)}>
             <option value="all">Riesgo (Todos)</option>
             <option value="alto">Alto</option>
             <option value="medio">Medio</option>
             <option value="bajo">Bajo</option>
           </select>
 
-          {/* === INPUT PUERTOS MÍN === */}
-          <input
-            type="number"
-            className="form-control form-control-sm w-auto bg-dark text-white border-secondary"
-            placeholder="Puertos mín"
-            value={minPorts}
-            onChange={(e) => setMinPorts(e.target.value)}
-          />
+          <select className="form-select form-select-sm w-auto" value={filterSource} onChange={(e) => setFilterSource(e.target.value)}>
+            <option value="all">Origen (Todos)</option>
+            <option value="AGENT">Agente</option>
+            <option value="SCAN_REST">Scan REST</option>
+          </select>
 
-          <input
-            type="number"
-            className="form-control form-control-sm w-auto bg-dark text-white border-secondary"
-            placeholder="Puertos máx"
-            value={maxPorts}
-            onChange={(e) => setMaxPorts(e.target.value)}
-          />
-
-          <input
-            type="date"
-            className="form-control form-control-sm bg-dark text-white border-secondary"
-            value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-          />
-
-          <input
-            type="date"
-            className="form-control form-control-sm bg-dark text-white border-secondary"
-            value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
-          />
+          <input type="number" className="form-control form-control-sm w-auto" placeholder="Puertos mín" value={minPorts} onChange={(e) => setMinPorts(e.target.value)} />
+          <input type="number" className="form-control form-control-sm w-auto" placeholder="Puertos máx" value={maxPorts} onChange={(e) => setMaxPorts(e.target.value)} />
+          <input type="date" className="form-control form-control-sm" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} />
+          <input type="date" className="form-control form-control-sm" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
         </div>
       </div>
 
-      {/* ========== TABLA ========== */}
+      {/* TABLA */}
       <div className="table-responsive">
         <table className="table theme-table table-striped table-hover align-middle mb-0">
-          <thead
-            className="sticky-top"
-            style={{
-              background: "var(--card-bg)",
-              borderBottom: "1px solid var(--card-border)",
-              color: "var(--text)",
-            }}
-          >
+          <thead className="sticky-top">
             <tr>
               <th>Host</th>
               <th>SO</th>
               <th className="text-center">Puertos</th>
               <th className="text-center">Riesgo</th>
+              <th className="text-center">Origen</th>
               <th>Último Escaneo</th>
               <th className="text-end">Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan="6" className="text-center py-4 text-muted">
-                  <i className="bi bi-exclamation-circle me-2"></i>
-                  No hay resultados para los filtros.
-                </td>
-              </tr>
-            ) : (
-              filtered.map((h) => (
+            {filtered.map((h) => {
+              const source = hostSource(h);
+
+              return (
                 <tr key={h.id}>
                   <td>
                     <div className="fw-bold text-info">{h.ip_address}</div>
@@ -233,8 +200,13 @@ export default function HostSummaryTable() {
                   </td>
 
                   <td className="fw-bold text-center">{h.total_ports ?? 0}</td>
-
                   <td className="text-center">{riskBadge(h.high_risk_count)}</td>
+
+                  <td className="text-center">
+                    <span className={`badge ${source === "AGENT" ? "bg-success" : "bg-primary"}`}>
+                      {source === "AGENT" ? "AGENTE" : "SCAN"}
+                    </span>
+                  </td>
 
                   <td>
                     {h.scan_date ? (
@@ -251,16 +223,13 @@ export default function HostSummaryTable() {
                   </td>
 
                   <td className="text-end">
-                    <button
-                      className="btn btn-sm btn-info"
-                      onClick={() => setSelectedHost(h)}
-                    >
+                    <button className="btn btn-sm btn-info" onClick={() => setSelectedHost(h)}>
                       <i className="bi bi-eye-fill"></i>
                     </button>
                   </td>
                 </tr>
-              ))
-            )}
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -280,31 +249,21 @@ export default function HostSummaryTable() {
             className="modal-dialog modal-xl modal-dialog-centered"
             onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="modal-content text-white"
-              style={{ background: "#1e1f22", borderRadius: "12px" }}
-            >
-              <div
-                className="modal-header"
-                style={{
-                  borderBottom: "1px solid #2c2d30",
-                  background: "#1c1d20",
-                }}
-              >
+            <div className="modal-content text-white theme-modal">
+              <div className="modal-header theme-modal-header">
                 <h4 className="modal-title fw-bold">
                   <i className="bi bi-server me-2 text-info"></i>
                   Detalles del Host
                 </h4>
                 <button
-                  className="btn-close btn-close-white"
+                  type="button"
+                  className="btn-close btn-close-white theme-modal-close"
+                  aria-label="Close"
                   onClick={() => setSelectedHost(null)}
                 ></button>
               </div>
 
-              <div
-                className="modal-body"
-                style={{ maxHeight: "70vh", overflowY: "auto" }}
-              >
+              <div className="modal-body" style={{ maxHeight: "70vh", overflowY: "auto" }}>
                 <h3 className="text-info fw-bold">{selectedHost.ip_address}</h3>
                 <p className="text-muted">{selectedHost.hostname || "—"}</p>
 
@@ -321,11 +280,7 @@ export default function HostSummaryTable() {
 
                 {selectedHost.ports?.length > 0 ? (
                   selectedHost.ports.map((port) => (
-                    <div
-                      key={port.id}
-                      className="p-3 mb-3 rounded"
-                      style={{ background: "#26272b", borderLeft: "4px solid #0dcaf0" }}
-                    >
+                    <div key={port.id} className="p-3 mb-3 rounded theme-modal-port">
                       <h6 className="fw-bold">
                         {port.port_number}/{port.protocol} —{" "}
                         <span className="text-warning">{port.service_name || "Desconocido"}</span>
@@ -349,9 +304,7 @@ export default function HostSummaryTable() {
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-muted small m-0">
-                          No hay vulnerabilidades para este puerto.
-                        </p>
+                        <p className="text-muted small m-0">No hay vulnerabilidades para este puerto.</p>
                       )}
                     </div>
                   ))
@@ -360,7 +313,7 @@ export default function HostSummaryTable() {
                 )}
               </div>
 
-              <div className="modal-footer" style={{ borderTop: "1px solid #2c2d30" }}>
+              <div className="modal-footer theme-modal-footer">
                 <button className="btn btn-secondary" onClick={() => setSelectedHost(null)}>
                   Cerrar
                 </button>
@@ -372,3 +325,4 @@ export default function HostSummaryTable() {
     </div>
   );
 }
+

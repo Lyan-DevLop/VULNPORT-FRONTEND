@@ -5,54 +5,41 @@ import axiosClient from "../../api/axiosClient";
 export default function Profile() {
   const { user, logout } = useAuth();
 
-  // CAMPOS DEL PERFIL
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
 
-  // CONTRASEÑA
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [show, setShow] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
 
-  // 2FA
-  const [show2FAModal, setShow2FAModal] = useState(false);
-  const [pendingAction, setPendingAction] = useState(null);
-
-  const [method, setMethod] = useState("totp");
-  const [twofaCode, setTwofaCode] = useState("");
-  const [validating, setValidating] = useState(false);
-  const [valid, setValid] = useState(null);
-
-  const [secondsLeft, setSecondsLeft] = useState(600);
-  const [emailSent, setEmailSent] = useState(false);
+  const [open, setOpen] = useState({
+    account: true,
+    security: false,
+    session: false,
+  });
 
   const [status, setStatus] = useState(null);
 
-  // TIMER correo 2FA
-  useEffect(() => {
-    if (method !== "email" || !show2FAModal) return;
-    if (secondsLeft === 0) return;
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
+  const [method, setMethod] = useState("totp");
+  const [twofaCode, setTwofaCode] = useState("");
+  const [valid, setValid] = useState(null);
 
-    const interval = setInterval(() => {
-      setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [method, show2FAModal, secondsLeft]);
-
-  // VALIDACIÓN CODE
+  /* VALIDACIÓN 2FA */
   useEffect(() => {
     if (twofaCode.length !== 6) {
       setValid(null);
       return;
     }
 
-    const timer = setTimeout(async () => {
-      setValidating(true);
+    const t = setTimeout(async () => {
       try {
         const res = await axiosClient.post("/auth/check-2fa", {
           user_id: user.id,
@@ -63,46 +50,40 @@ export default function Profile() {
       } catch {
         setValid(false);
       }
-      setValidating(false);
-    }, 350);
+    }, 300);
 
-    return () => clearTimeout(timer);
-  }, [twofaCode, method]);
+    return () => clearTimeout(t);
+  }, [twofaCode, method, user.id]);
 
-  // ABRIR MODAL
-  function askFor2FA(action) {
+  function toggle(section) {
+    setOpen((prev) => ({ ...prev, [section]: !prev[section] }));
+  }
+
+  function open2FA(action) {
     if (action === "password") {
       if (!currentPassword || !newPassword || !confirmPassword) {
-        return setStatus({
-          type: "error",
-          msg: "Todos los campos son obligatorios.",
-        });
+        return setStatus({ type: "error", msg: "Completa todos los campos." });
       }
-
       if (newPassword !== confirmPassword) {
-        return setStatus({
-          type: "error",
-          msg: "Las nuevas contraseñas no coinciden.",
-        });
+        return setStatus({ type: "error", msg: "Las contraseñas no coinciden." });
       }
     }
 
     setPendingAction(action);
     setTwofaCode("");
     setValid(null);
-    setSecondsLeft(600);
-    setEmailSent(false);
     setShow2FAModal(true);
   }
 
-  // EJECUTAR ACCIÓN
-  async function processAction() {
+  async function confirmAction() {
     try {
       if (pendingAction === "profile") {
         const res = await axiosClient.put("/users/me", { username, email });
         localStorage.setItem("user", JSON.stringify(res.data));
-        setStatus({ type: "success", msg: "Perfil actualizado." });
-      } else if (pendingAction === "password") {
+        setStatus({ type: "success", msg: "Datos actualizados." });
+      }
+
+      if (pendingAction === "password") {
         await axiosClient.post("/auth/change-password", {
           current_password: currentPassword,
           new_password: newPassword,
@@ -110,52 +91,33 @@ export default function Profile() {
           method,
         });
 
-        setStatus({
-          type: "success",
-          msg: "Contraseña cambiada correctamente.",
-        });
-
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
+        setStatus({ type: "success", msg: "Contraseña actualizada." });
       }
 
       setShow2FAModal(false);
-    } catch (err) {
+    } catch (e) {
       setStatus({
         type: "error",
-        msg: err.response?.data?.detail || "Error al procesar acción.",
+        msg: e.response?.data?.detail || "Error inesperado.",
       });
     }
   }
 
-  // REENVIAR CORREO
-  async function sendEmailCode() {
-    try {
-      await axiosClient.post("/twofa/email/send");
-      setEmailSent(true);
-      setSecondsLeft(600);
-      setStatus({ type: "success", msg: "Código enviado al correo." });
-    } catch {
-      setStatus({ type: "error", msg: "No se pudo enviar el código." });
-    }
-  }
-
-  //  UI
   return (
-    <div className="container-fluid mt-4" style={{ color: "var(--text)" }}>
-      <h2 className="fw-bold">
-        <i className="bi bi-person-circle me-2 text-info"></i> Mi Perfil
-      </h2>
+    <div className="container mt-4" style={{ maxWidth: 900 }}>
+      <header className="mb-4">
+        <h2 className="fw-bold mb-1">Mi perfil</h2>
+        <p className="text-muted mb-0">
+          Configuración de cuenta y seguridad
+        </p>
+      </header>
 
-      <p className="text-muted mb-4">
-        Gestiona tu cuenta, seguridad y autenticación.
-      </p>
-
-      {/* ALERTA */}
       {status && (
         <div
-          className={`alert mt-3 shadow-sm ${
+          className={`alert py-2 ${
             status.type === "success" ? "alert-success" : "alert-danger"
           }`}
         >
@@ -163,288 +125,225 @@ export default function Profile() {
         </div>
       )}
 
-      {/* SECCIÓN: INFORMACIÓN BÁSICA */}
-      <div
-        className="card p-4 mt-3 shadow-sm"
-        style={{
-          background: "var(--card-bg)",
-          border: "1px solid var(--card-border)",
-        }}
-      >
-        <h4 className="fw-bold mb-3">
-          <i className="bi bi-person-badge-fill me-2 text-info"></i>
-          Información básica
-        </h4>
+      {/* ACORDIÓN */}
 
-        <div className="mb-3">
-          <label className="form-label">Nombre de usuario</label>
-          <input
-            className="form-control"
-            style={{
-              background: "var(--input-bg)",
-              color: "var(--input-text)",
-              borderColor: "var(--input-border)",
-            }}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className="form-label">Correo electrónico</label>
-          <input
-            type="email"
-            className="form-control"
-            style={{
-              background: "var(--input-bg)",
-              color: "var(--input-text)",
-              borderColor: "var(--input-border)",
-            }}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <button
-          className="btn btn-info mt-3 w-100 fw-bold"
-          onClick={() => askFor2FA("profile")}
+      {/* CUENTA */}
+      <div className="card accordion-card mb-3 shadow-sm">
+        <div
+          className="card-header accordion-header d-flex justify-content-between align-items-center"
+          onClick={() => toggle("account")}
         >
-          Guardar cambios
-        </button>
+          <div>
+            <h6 className="mb-0 fw-bold">Datos de la cuenta</h6>
+            <small className="text-muted">Usuario y correo</small>
+          </div>
+          <i
+            className={`bi bi-chevron-down accordion-icon ${
+              open.account ? "open" : ""
+            }`}
+          />
+        </div>
+
+        <div
+          className={`accordion-body ${
+            open.account ? "open" : "closed"
+          }`}
+        >
+          <div className="card-body">
+            <div className="row g-3">
+              <div className="col-md-6">
+                <label className="form-label small">Usuario</label>
+                <input
+                  className="form-control form-control-sm"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label small">Correo electrónico</label>
+                <input
+                  type="email"
+                  className="form-control form-control-sm"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="text-end mt-3">
+              <button
+                className="btn btn-primary btn-sm px-4"
+                onClick={() => open2FA("profile")}
+              >
+                Guardar cambios
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* SECCIÓN: CONTRASEÑA */}
-      <div
-        className="card p-4 mt-4 shadow-sm"
-        style={{
-          background: "var(--card-bg)",
-          border: "1px solid var(--card-border)",
-        }}
-      >
-        <h4 className="fw-bold mb-3">
-          <i className="bi bi-shield-lock-fill text-warning me-2"></i>
-          Seguridad: Cambiar contraseña
-        </h4>
-
-        {/* Contraseña actual */}
-        <div className="mb-3 position-relative">
-          <label className="form-label">Contraseña actual</label>
-          <input
-            type={showCurrent ? "text" : "password"}
-            className="form-control"
-            style={{
-              background: "var(--input-bg)",
-              color: "var(--input-text)",
-              borderColor: "var(--input-border)",
-            }}
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-          />
-          <i
-            className={`bi ${
-              showCurrent ? "bi-eye-slash" : "bi-eye"
-            } text-info`}
-            style={{
-              position: "absolute",
-              right: 12,
-              top: 40,
-              cursor: "pointer",
-            }}
-            onClick={() => setShowCurrent(!showCurrent)}
-          />
-        </div>
-
-        {/* Nueva */}
-        <div className="mb-3 position-relative">
-          <label className="form-label">Nueva contraseña</label>
-          <input
-            type={showNew ? "text" : "password"}
-            className="form-control"
-            style={{
-              background: "var(--input-bg)",
-              color: "var(--input-text)",
-              borderColor: "var(--input-border)",
-            }}
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <i
-            className={`bi ${showNew ? "bi-eye-slash" : "bi-eye"} text-info`}
-            style={{
-              position: "absolute",
-              right: 12,
-              top: 40,
-              cursor: "pointer",
-            }}
-            onClick={() => setShowNew(!showNew)}
-          />
-        </div>
-
-        {/* Confirmación */}
-        <div className="mb-3 position-relative">
-          <label className="form-label">Confirmar nueva</label>
-          <input
-            type={showConfirm ? "text" : "password"}
-            className="form-control"
-            style={{
-              background: "var(--input-bg)",
-              color: "var(--input-text)",
-              borderColor: "var(--input-border)",
-            }}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <i
-            className={`bi ${showConfirm ? "bi-eye-slash" : "bi-eye"} text-info`}
-            style={{
-              position: "absolute",
-              right: 12,
-              top: 40,
-              cursor: "pointer",
-            }}
-            onClick={() => setShowConfirm(!showConfirm)}
-          />
-        </div>
-
-        <button
-          className="btn btn-warning fw-bold w-100"
-          onClick={() => askFor2FA("password")}
+      {/* SEGURIDAD */}
+      <div className="card accordion-card mb-3 shadow-sm">
+        <div
+          className="card-header accordion-header d-flex justify-content-between align-items-center"
+          onClick={() => toggle("security")}
         >
-          <i className="bi bi-key me-2"></i>
-          Cambiar contraseña
-        </button>
+          <div>
+            <h6 className="mb-0 fw-bold">Seguridad</h6>
+            <small className="text-muted">Contraseña y protección</small>
+          </div>
+          <i
+            className={`bi bi-chevron-down accordion-icon ${
+              open.security ? "open" : ""
+            }`}
+          />
+        </div>
+
+        <div
+          className={`accordion-body ${
+            open.security ? "open" : "closed"
+          }`}
+        >
+          <div className="card-body">
+            {[
+              ["Contraseña actual", "current", currentPassword, setCurrentPassword],
+              ["Nueva contraseña", "new", newPassword, setNewPassword],
+              ["Confirmar nueva", "confirm", confirmPassword, setConfirmPassword],
+            ].map(([label, key, value, setter]) => (
+              <div key={key} className="mb-3">
+                <label className="form-label small">{label}</label>
+                <div className="position-relative">
+                  <input
+                    type={show[key] ? "text" : "password"}
+                    className="form-control form-control-sm pe-5"
+                    value={value}
+                    onChange={(e) => setter(e.target.value)}
+                  />
+                  <span
+                    className="password-eye"
+                    onClick={() =>
+                      setShow((s) => ({ ...s, [key]: !s[key] }))
+                    }
+                  >
+                    <i
+                      className={`bi ${
+                        show[key] ? "bi-eye-slash" : "bi-eye"
+                      }`}
+                    />
+                  </span>
+                </div>
+              </div>
+            ))}
+
+            <div className="text-end">
+              <button
+                className="btn btn-warning btn-sm px-4"
+                onClick={() => open2FA("password")}
+              >
+                Cambiar contraseña
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* LOGOUT */}
-      <button className="btn btn-danger w-100 mt-4 fw-bold" onClick={logout}>
-        <i className="bi bi-box-arrow-right me-2"></i>
-        Cerrar sesión
-      </button>
+      {/* SESIÓN */}
+      <div className="card accordion-card shadow-sm border-danger">
+        <div
+          className="card-header accordion-header d-flex justify-content-between align-items-center"
+          onClick={() => toggle("session")}
+        >
+          <div>
+            <h6 className="mb-0 fw-bold text-danger">Sesión</h6>
+            <small className="text-muted">Acciones críticas</small>
+          </div>
+          <i
+            className={`bi bi-chevron-down accordion-icon ${
+              open.session ? "open" : ""
+            }`}
+          />
+        </div>
 
-      {/* ============================
-          MODAL 2FA
-      ============================ */}
+        <div
+          className={`accordion-body ${
+            open.session ? "open" : "closed"
+          }`}
+        >
+          <div className="card-body d-flex justify-content-between align-items-center">
+            <span className="text-muted small">
+              Cerrar la sesión en este dispositivo
+            </span>
+            <button
+              className="btn btn-outline-danger btn-sm"
+              onClick={logout}
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* MODAL 2FA */}
       {show2FAModal && (
         <div
           className="modal fade show"
           style={{
             display: "block",
-            background: "rgba(0,0,0,0.65)",
+            background: "rgba(0,0,0,.6)",
             backdropFilter: "blur(4px)",
           }}
         >
           <div className="modal-dialog modal-dialog-centered">
-            <div
-              className="modal-content text-white"
-              style={{
-                background: "var(--card-bg)",
-                border: "1px solid var(--card-border)",
-              }}
-            >
-              <div className="modal-header border-secondary">
-                <h5 className="modal-title fw-bold">
-                  <i className="bi bi-shield-lock-fill text-info me-2"></i>
-                  Validación 2FA
-                </h5>
+            <div className="modal-content theme-modal">
+              <div className="modal-header theme-modal-header">
+                <h6 className="modal-title fw-bold">
+                  Verificación de seguridad
+                </h6>
                 <button
-                  className="btn-close btn-close-white"
+                  className="btn-close theme-modal-close"
                   onClick={() => setShow2FAModal(false)}
                 />
               </div>
 
               <div className="modal-body">
-
-                {/* Método */}
-                <label className="form-label">Método de validación</label>
+                <label className="form-label small">Método</label>
                 <select
-                  className="form-select mb-3"
-                  style={{
-                    background: "var(--input-bg)",
-                    color: "var(--input-text)",
-                    borderColor: "var(--input-border)",
-                  }}
+                  className="form-select form-select-sm mb-3"
                   value={method}
                   onChange={(e) => {
                     setMethod(e.target.value);
                     setTwofaCode("");
                     setValid(null);
-                    setSecondsLeft(600);
-                    setEmailSent(false);
                   }}
                 >
-                  <option value="totp">App Authenticator</option>
-                  <option value="email">Correo electrónico</option>
+                  <option value="totp">Authenticator</option>
+                  <option value="email">Correo</option>
                 </select>
 
-                {method === "email" && (
-                  <>
-                    <button
-                      className="btn btn-secondary w-100 fw-bold mb-3"
-                      onClick={sendEmailCode}
-                    >
-                      <i className="bi bi-envelope me-2"></i>
-                      Enviar código al correo
-                    </button>
-
-                    {emailSent && (
-                      <div className="text-center text-muted mb-3">
-                        Código expira en{" "}
-                        <span className="fw-bold">
-                          {Math.floor(secondsLeft / 60)}:
-                          {String(secondsLeft % 60).padStart(2, "0")}
-                        </span>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {/* Código */}
-                <label className="form-label">Código 2FA</label>
-                <div className="position-relative">
-                  <input
-                    type="text"
-                    maxLength={6}
-                    className="form-control"
-                    style={{
-                      background: "var(--input-bg)",
-                      color: "var(--input-text)",
-                      borderColor: "var(--input-border)",
-                    }}
-                    value={twofaCode}
-                    onChange={(e) => setTwofaCode(e.target.value)}
-                  />
-
-                  {twofaCode.length === 6 && (
-                    <div style={{ position: "absolute", right: 12, top: 8 }}>
-                      {validating ? (
-                        <div className="spinner-border spinner-border-sm text-info" />
-                      ) : valid ? (
-                        <i className="bi bi-check-circle-fill text-success fs-4" />
-                      ) : (
-                        <i className="bi bi-x-circle-fill text-danger fs-4" />
-                      )}
-                    </div>
-                  )}
-                </div>
+                <input
+                  className="form-control form-control-sm text-center fw-bold"
+                  maxLength={6}
+                  value={twofaCode}
+                  onChange={(e) => setTwofaCode(e.target.value)}
+                />
               </div>
 
-              <div className="modal-footer border-secondary">
+              <div className="modal-footer theme-modal-footer">
                 <button
-                  className="btn btn-secondary"
+                  className="btn btn-secondary btn-sm"
                   onClick={() => setShow2FAModal(false)}
                 >
                   Cancelar
                 </button>
-
                 <button
-                  className="btn btn-info fw-bold"
-                  disabled={twofaCode.length !== 6 || !valid}
-                  onClick={processAction}
+                  className="btn btn-primary btn-sm"
+                  disabled={!valid}
+                  onClick={confirmAction}
                 >
                   Confirmar
                 </button>
               </div>
-
             </div>
           </div>
         </div>
