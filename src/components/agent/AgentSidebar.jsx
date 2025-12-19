@@ -50,7 +50,7 @@ export default function AgentSidebar({
       <hr className="my-3" style={{ borderColor: "var(--card-border)" }} />
 
       <h6 className="fw-bold mb-2" style={{ color: "var(--link-active)" }}>
-        <i className="bi bi-diagram-3 me-2"></i>Hosts
+        <i className="bi bi-diagram-3 me-2"></i>Mapa de Red
       </h6>
 
       {hosts.map((h) => (
